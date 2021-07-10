@@ -57,10 +57,14 @@ def assistente():
                     entrada = rec.recognize_google(audio, language="pt-br")
                     print("{}: {}".format(user_name, entrada))
 
-                    #Abrir Aplicativo
-                    if "Abrir" in entrada:
-                        resposta = abrir(entrada)
 
+                    #Pesquisa Google
+                    if "pesquisa" in entrada:
+                        resposta = pesquisa(entrada)
+
+                    #Abrir Aplicativo
+                    elif "Abrir" in entrada:
+                        resposta = abrir(entrada)
 
                     #operações matemáticas
                     elif "Quanto é" in entrada or "quanto é" in entrada:

@@ -2,11 +2,14 @@ import requests as rq
 import webbrowser as web
 import os
 from requests.api import get
+from googlesearch import search
 
+
+web.register('google-chrome', None)
 version = "1.0.0"
-cidade = 'joinville'
+cidade = 'sao+paulo'
 caminho_navegador = "C:/Program Files/Google/Chrome/Application/chrome.exe %s"
-caminho_jogos = "C:/Riot Games/Riot Client/RiotClientServices.exe %s"
+caminho_jogos = "C:/Program Files (x86)/Steam/Steam.exe"
 
 def intro():
     msg = "Fritz - version {} / by: Wesley Lins".format(version)
@@ -107,7 +110,7 @@ def calcula(entrada):
 
 def clima_tempo():
     
-    endereco_api = "https://api.openweathermap.org/data/2.5/weather?q=guarulhos&appid=a2b5dc2df428fbf233b09e3e07376119&q??"
+    endereco_api = "https://api.openweathermap.org/data/2.5/weather?q=sao+paulo&appid=a2b5dc2df428fbf233b09e3e07376119&q??"
     url = endereco_api
 
     infos = rq.get(url).json()
@@ -145,7 +148,15 @@ def abrir(fala):
         elif "Netflix" in fala:
             web.get(caminho_navegador).open("netflix.com/")
             return "abrindo netflix"
-        
+        elif "Twitch" in fala:
+            web.get(caminho_navegador).open("twitch.tv/")
+            return "abrindo twitch"
+        elif "Steam" in fala:
+            os.startfile("C:/Program Files (x86)/Steam/Steam.exe")
+            return "Abrindo steam"
+        elif "lol" in fala:
+            os.startfile("C:/Riot Games/League of Legends/LeagueClient.exe")
+            return "Vai abrir esse jogo ruim mesmo ?"
         elif "Facebook" in fala:
             web.get(caminho_navegador).open("facebook.com.br/")
             return "abrindo facebook"
@@ -153,10 +164,22 @@ def abrir(fala):
             web.get(caminho_navegador).open("instagram.com/")
             return "abrindo instagram"
         elif "Youtube" in fala:
-            web.get(caminho_navegador).open("youtube.com")
+            web.get(caminho_navegador).open("youtube.com/")
             return "abrindo Youtube"
         else:
             return "site não cadastrado para aberturas"
     except:
         return "houve um erro"
 
+
+def pesquisa(fala):
+    if fala.startswith("pesquisa"):
+        fala = fala.replace("pesquisa", "")
+    try:
+        for result in search(fala, num_results=0, lang="pt"):
+            web.open(result)
+        return "Foi oque eu encontrei"
+    except:
+        print("Houve um erro na pesquisa")
+    
+        
