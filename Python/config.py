@@ -1,11 +1,15 @@
 import requests as rq
 import webbrowser as web
+import os
+from requests.api import get
 
 version = "1.0.0"
 cidade = 'joinville'
+caminho_navegador = "C:/Program Files/Google/Chrome/Application/chrome.exe %s"
+caminho_jogos = "C:/Riot Games/Riot Client/RiotClientServices.exe %s"
 
 def intro():
-    msg = "Assistente - version {} / by: Wesley Lins".format(version)
+    msg = "Fritz - version {} / by: Wesley Lins".format(version)
     print("-" * len(msg) + "\n{}\n".format(msg) + "-" * len(msg)) 
 
 lista_erros = [
@@ -68,7 +72,7 @@ def verifica_nome_existe(nome):
     vazio.writelines(conteudo)
     vazio.close
     
-    return "Oi {} é a primera vez que nos falamos".format(nome)
+    return "Oi {} ".format(nome)
 
 
 def name_list():
@@ -103,8 +107,8 @@ def calcula(entrada):
 
 def clima_tempo():
     
-    endereco_api = "http://api.openweathermap.org/data/2.5/weather?appid=a2b5dc2df428fbf233b09e3e07376119&q"
-    url = endereco_api + cidade
+    endereco_api = "https://api.openweathermap.org/data/2.5/weather?q=guarulhos&appid=a2b5dc2df428fbf233b09e3e07376119&q??"
+    url = endereco_api
 
     infos = rq.get(url).json()
 
@@ -133,8 +137,26 @@ def temperatura():
     temp_min = clima_tempo()[6]
     return [temp_atual, temp_max, temp_min]
 
-# def abrir(fala):
-#     try:
-#         if "google" in fala:
-#             web.get(caminho_navegador).open("google.com.br/")
+def abrir(fala):
+    try:
+        if "Google" in fala:
+            web.get(caminho_navegador).open("google.com.br/")
+            return "abrindo o google"
+        elif "Netflix" in fala:
+            web.get(caminho_navegador).open("netflix.com/")
+            return "abrindo netflix"
+        
+        elif "Facebook" in fala:
+            web.get(caminho_navegador).open("facebook.com.br/")
+            return "abrindo facebook"
+        elif "Instagram" in fala:
+            web.get(caminho_navegador).open("instagram.com/")
+            return "abrindo instagram"
+        elif "Youtube" in fala:
+            web.get(caminho_navegador).open("youtube.com")
+            return "abrindo Youtube"
+        else:
+            return "site não cadastrado para aberturas"
+    except:
+        return "houve um erro"
 

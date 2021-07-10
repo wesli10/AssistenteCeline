@@ -4,9 +4,6 @@ from config import *
 from random import choice
 
 
-
-
-
 reproducao = pyttsx3.init()
 voices = reproducao.getProperty('voices')
 reproducao.setProperty('voices', voices[1].id)
@@ -16,9 +13,9 @@ def sai_som(resposta):
     reproducao.say(resposta)
     reproducao.runAndWait()
 
-def assistente(): 
-    print("Oi, qual é o  seu nome completo")
-    sai_som("Eu me chamo Fritz, qual é o seu nome completo")
+def assistente():
+    print("( ' - ') Just Do IT")
+    sai_som("Eu me chamo Fritz, com quem eu falo?")
     while True:
         resposta_erro_aleatoria = choice(lista_erros)
         rec = sr.Recognizer()
@@ -60,8 +57,13 @@ def assistente():
                     entrada = rec.recognize_google(audio, language="pt-br")
                     print("{}: {}".format(user_name, entrada))
 
+                    #Abrir Aplicativo
+                    if "Abrir" in entrada:
+                        resposta = abrir(entrada)
+
+
                     #operações matemáticas
-                    if "Quanto é" in entrada or "quanto é" in entrada:
+                    elif "Quanto é" in entrada or "quanto é" in entrada:
                         entrada = entrada.replace("Quanto é", "")
                         resposta = calcula(entrada)
 
@@ -74,12 +76,12 @@ def assistente():
                         temp_min = lista_tempo[2]
 
                         resposta = "A temperatura de hoje é {:.2f}°. Temos a máxima de {:.2f}° e uma minima de {:.2f}°".format(temp,  temp_max, temp_min)
-                    
+
                     # Informações da cidade
                     elif "informações" in entrada and "cidade" in entrada:
 
                         resposta = "Mostrando informações da cidade"
-                    
+
                     else:
                         resposta = conversas[entrada]
 
@@ -111,7 +113,7 @@ def assistente():
                         print("Velocidade do vento: {}m/s\nDireção do vento: {}".format(v_speed,v_direc))
 
                     else:
-                        print('Assistente: {}'.format(resposta))
+                        print('Fritz: {}'.format(resposta))
                         sai_som('{}'.format(resposta))
 
                 except sr.UnknownValueError:
