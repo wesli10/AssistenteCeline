@@ -3,29 +3,31 @@ import webbrowser as web
 import os
 from requests.api import get
 from googlesearch import search
+from datetime import date
 
 
-web.register('google-chrome', None)
+
 version = "1.0.0"
 cidade = 'sao+paulo'
 caminho_navegador = "C:/Program Files/Google/Chrome/Application/chrome.exe %s"
 caminho_jogos = "C:/Program Files (x86)/Steam/Steam.exe"
 
 def intro():
-    msg = "Fritz - version {} / by: Wesley Lins".format(version)
+    msg = "Celine - version {} / by: Wesley Lins".format(version)
     print("-" * len(msg) + "\n{}\n".format(msg) + "-" * len(msg)) 
 
 lista_erros = [
     "Não entendi nada",
     "Desculpe, não entendi",
-    "Repita por gentileza"
+    "Repita por gentileza",
+    "Fala direito porra"
 ]
 
 conversas = {
-    "Olá": "oi, tudo bem?",
+    "Eae": "oi, tudo bem?",
     "sim e você": "Estou bem obrigada por perguntar",
-    "suave": "Tudo tranquilo mestre",
-    "como está": "O dia ta lindo, clima ensorarado"
+    "como está": "O dia ta lindo, clima ensorarado",
+    "Quem é você": "Eu me chamo Celine, Fui programada pelo meu mestre Wesley Lins, em um periodo onde ele não tinha o que fazer da vida, e venho evoluindo para suprir as necessidades dos meus usúarios."
     
 }
 
@@ -66,7 +68,7 @@ def verifica_nome_existe(nome):
 
     for linha in nome_list:
         if linha == nome:
-            return "Olá {}, qual a boa ?".format(nome)
+            return "Olá {}, o que deseja ?".format(nome)
 
     vazio = open("dados/nomes.txt", "r")
     conteudo = vazio.readlines()
@@ -144,42 +146,72 @@ def abrir(fala):
     try:
         if "Google" in fala:
             web.get(caminho_navegador).open("google.com.br/")
-            return "abrindo o google"
+            return None
+            
         elif "Netflix" in fala:
             web.get(caminho_navegador).open("netflix.com/")
-            return "abrindo netflix"
+            return None
+            
         elif "Twitch" in fala:
             web.get(caminho_navegador).open("twitch.tv/")
-            return "abrindo twitch"
+            return None
+            
         elif "Steam" in fala:
             os.startfile("C:/Program Files (x86)/Steam/Steam.exe")
-            return "Abrindo steam"
+            return None
+        
+        elif "CS" in fala:
+            web.open("steam://rungameid/730")
+
+            
         elif "lol" in fala:
             os.startfile("C:/Riot Games/League of Legends/LeagueClient.exe")
-            return "Vai abrir esse jogo ruim mesmo ?"
+            return None
         elif "Facebook" in fala:
             web.get(caminho_navegador).open("facebook.com.br/")
-            return "abrindo facebook"
+            return None
+            
         elif "Instagram" in fala:
             web.get(caminho_navegador).open("instagram.com/")
-            return "abrindo instagram"
+            return None
+            
         elif "Youtube" in fala:
-            web.get(caminho_navegador).open("youtube.com/")
-            return "abrindo Youtube"
+            web.get(caminho_navegador).open("youtube.com")
+            return None
+            
         else:
             return "site não cadastrado para aberturas"
     except:
-        return "houve um erro"
+        pass
 
 
 def pesquisa(fala):
     if fala.startswith("pesquisa"):
         fala = fala.replace("pesquisa", "")
     try:
-        for result in search(fala, num_results=0, lang="pt"):
+        for result in search(fala, num_results=0 ):
             web.open(result)
-        return "Foi oque eu encontrei"
+        return None
     except:
         print("Houve um erro na pesquisa")
     
+def anotar(fala):
+
+    data_atual = date.today()
+    data_format = "{}/{}".format(data_atual.day, data_atual.month)
+    
+    
+    if fala.startswith("anotar"):
+        fala = fala.replace("anotar", "")
         
+    try:
+        dados = open("dados/notas.txt", "r")
+        dados_lista = dados.readlines()
+        dados_lista.append(fala)
+        dados = open("dados/notas.txt", "a")
+        dados.writelines(f"{data_format}: {fala} \n")
+        dados.close
+    except FileNotFoundError:
+        dados = open("dados/notas.txt", "w")
+        dados.close
+

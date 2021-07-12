@@ -2,11 +2,12 @@ import speech_recognition as sr
 import pyttsx3
 from config import *
 from random import choice
+import sys
 
 
 reproducao = pyttsx3.init()
 voices = reproducao.getProperty('voices')
-reproducao.setProperty('voices', voices[1].id)
+reproducao.setProperty('voices', voices[0].id)
 
 
 def sai_som(resposta):
@@ -15,7 +16,7 @@ def sai_som(resposta):
 
 def assistente():
     print("( ' - ') Just Do IT")
-    sai_som("Eu me chamo Fritz, com quem eu falo?")
+    sai_som("Eu me chamo Celine, com quem eu falo?")
     while True:
         resposta_erro_aleatoria = choice(lista_erros)
         rec = sr.Recognizer()
@@ -29,7 +30,6 @@ def assistente():
                     user_name = verifica_nome(user_name)
                     name_list()
                     apresentacao = "{}".format(verifica_nome_existe(user_name))
-                    print(apresentacao)
                     sai_som(apresentacao)
 
                     brute_user_name = user_name
@@ -39,12 +39,9 @@ def assistente():
 
 
                 except sr.UnknownValueError:
-                    print(resposta_erro_aleatoria)
-                    sai_som(resposta_erro_aleatoria)
+                    pass
             break
 
-    print("="* len(apresentacao))
-    print("Ouvindo.....")
     while True:
         resposta_erro_aleatoria = choice(lista_erros)
         rec = sr.Recognizer()
@@ -55,22 +52,33 @@ def assistente():
                 try:
                     audio = rec.listen(s)
                     entrada = rec.recognize_google(audio, language="pt-br")
-                    print("{}: {}".format(user_name, entrada))
 
+
+                    #chame ela pra saber se está disponivel
+                    if "Celine" in entrada:
+                        sai_som("Pois não")
+
+
+                    elif "anotar" in entrada:
+                        anotar(entrada)
+
+                    #Reiniciar
+                    elif "Reiniciar PC" in entrada or "reiniciar computador" in entrada:
+                        os.system("shutdown /r /t 0")
 
                     #Pesquisa Google
-                    if "pesquisa" in entrada:
-                        resposta = pesquisa(entrada)
+                    elif "pesquisa" in entrada or "pesquisar" in entrada:
+                        pesquisa(entrada)
 
                     #Abrir Aplicativo
-                    elif "Abrir" in entrada:
-                        resposta = abrir(entrada)
+                    elif "Abrir" in entrada or "abre" in entrada:
+                        abrir(entrada)
 
                     #operações matemáticas
                     elif "Quanto é" in entrada or "quanto é" in entrada:
                         entrada = entrada.replace("Quanto é", "")
-                        resposta = calcula(entrada)
-
+                        sai_som(calcula(entrada))
+                        
                     # Pede Tempo
                     elif "temperatura" in entrada:
 
@@ -79,15 +87,17 @@ def assistente():
                         temp_max = lista_tempo[1]
                         temp_min = lista_tempo[2]
 
-                        resposta = "A temperatura de hoje é {:.2f}°. Temos a máxima de {:.2f}° e uma minima de {:.2f}°".format(temp,  temp_max, temp_min)
+                        sai_som("A temperatura de hoje é {:.2f}°. Temos a máxima de {:.2f}° e uma minima de {:.2f}°".format(temp,  temp_max, temp_min))
+                        
 
                     # Informações da cidade
                     elif "informações" in entrada and "cidade" in entrada:
 
-                        resposta = "Mostrando informações da cidade"
+                        sai_som("Mostrando informações da cidade")
+                        
 
                     else:
-                        resposta = conversas[entrada]
+                        sai_som(conversas[entrada])
 
                     if resposta == "Mostrando informações da cidade":
                         #mostra informações da cidade
@@ -117,18 +127,17 @@ def assistente():
                         print("Velocidade do vento: {}m/s\nDireção do vento: {}".format(v_speed,v_direc))
 
                     else:
-                        print('Fritz: {}'.format(resposta))
                         sai_som('{}'.format(resposta))
 
-                except sr.UnknownValueError:
-                    print(resposta_erro_aleatoria)
-                    sai_som(resposta_erro_aleatoria)
+                except:
+                    pass
+                    
 
 if __name__ == '__main__':
     intro()
     sai_som("iniciando")
     assistente()
-
-
+         
+            
 
 
